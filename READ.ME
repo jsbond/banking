@@ -1,0 +1,50 @@
+This is demo project
+
+for run you need:
+
+Java 8,
+Postgre 10
+Maven
+
+time spent: 8 hours
+
+Description
+- build a bank account to the user where he has a balance (i.e. $50)
+- built a user wallet where the user can withdraw from the bank account to his wallet
+- build an API to withdraw the money
+- implement the withdraw function to handle concurrent withdraw operation from the bank account
+
+Objective
+- Avoid double pay attack
+
+Implementation
+- the project initial state should be as follows
+- wallet with balance (i.e. $0)
+- bank account balance ( by default $50)
+- on every withdraw operation from the wallet - the amount of the withdraw should be deducted from the user bank account and transferred to the user wallet
+
+
+how it works?
+When application starts, CustomerServiceImpl in init() method prepares data to test.
+You can look Postgre DB data to prepare withdraw request.
+
+to withdraw from account send a patch request to localhost:{port}/account/withdraw endpoint with request body that includes parameters:
+-customerId
+-accountId
+-walletId
+-amountToTransfer
+-paymentToken
+
+(look AccountMoneyTransferRequest)
+
+to avoid parallel payment issues I used ReentrantLock.
+I lock account operations when changes with account are needed.
+I have LoadingCache where I keep locks in-memory to improve performance.
+
+Also I have payment tokens to avoid double payment attacks.
+When Customer comes to payment page, he has token (need to be created by another endpoint,
+I started implementation of creating tokens in CustomerFacadeImpl.
+
+I didn't write unit tests yet to save time if this work is not interesting for you.
+I can add it if you have interest on it.
+

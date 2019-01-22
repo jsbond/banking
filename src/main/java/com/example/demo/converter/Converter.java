@@ -1,0 +1,5 @@
+package com.example.demo.converter;
+
+public interface Converter<T, R> {
+    R convert(T t);
+}
